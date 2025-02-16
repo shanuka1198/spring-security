@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
                 productDto.getProductName(),
                 productDto.getQty()
         );
-        System.out.println(product);
+        System.out.println(product );
         return productRepository.save(product);
     }
 }
