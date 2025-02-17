@@ -1,35 +1,39 @@
 package com.shanuka_spring.shanuka_spring_3.service.impl;
 
 import com.shanuka_spring.shanuka_spring_3.dto.UserDto;
-import com.shanuka_spring.shanuka_spring_3.entity.User;
+import com.shanuka_spring.shanuka_spring_3.entity.UserEntity;
 import com.shanuka_spring.shanuka_spring_3.repository.UserRepository;
 import com.shanuka_spring.shanuka_spring_3.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User register(UserDto userDto) {
-        User user=new User(
+    public UserEntity register(UserDto userDto) {
+        UserEntity userEntity =new UserEntity(
                 userDto.getUserId(),
-                userDto.getUserName(),
+                userDto.getUsername(),
                 userDto.getEmail(),
-                userDto.getPassword()
-        );
-        return userRepository.save(user);
+                passwordEncoder.encode(userDto.getPassword()),
+                userDto.getRole());
+
+
+        return userRepository.save(userEntity);
     }
 
     @Override
-    public User login(String userName) {
-        return userRepository.findByUserName(userName).orElse(null);
+    public UserEntity login(String username) {
+        return userRepository.findByUserName(username).orElse(null);
 
     }
 }

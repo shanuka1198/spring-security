@@ -1,19 +1,22 @@
 package com.shanuka_spring.shanuka_spring_3.dto;
 
+import com.shanuka_spring.shanuka_spring_3.entity.UserEntity.Role;
+
 public class UserDto {
     private String userId;
-    private String userName;
+    private String username;
     private String email;
     private String password;
+    private Role role;
 
-    public UserDto() {
-    }
+    public UserDto() {}
 
-    public UserDto(String userId, String userName, String email, String password) {
+    public UserDto(String userId, String username, String email, String password, Role role) {
         this.userId = userId;
-        this.userName = userName;
+        this.username = username;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public String getUserId() {
@@ -24,12 +27,12 @@ public class UserDto {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -46,5 +49,13 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

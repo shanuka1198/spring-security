@@ -1,9 +1,8 @@
 package com.shanuka_spring.shanuka_spring_3.controller;
 
 import com.shanuka_spring.shanuka_spring_3.dto.UserDto;
-import com.shanuka_spring.shanuka_spring_3.entity.User;
+import com.shanuka_spring.shanuka_spring_3.entity.UserEntity;
 import com.shanuka_spring.shanuka_spring_3.service.impl.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,13 +17,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User register(@RequestBody UserDto userDto){
+    public UserEntity register(@RequestBody UserDto userDto){
         return userService.register(userDto);
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody UserDto userDto) {
-        return userService.login(userDto.getUserName());
+    public UserEntity login(@RequestBody UserDto userDto) {
+        return userService.login(userDto.getUsername());
     }
 
 }
