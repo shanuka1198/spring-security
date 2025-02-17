@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,String> {
     @Query("SELECT u FROM User u WHERE LOWER(u.userName) = LOWER(:userName)")
-    User findByUserName(@Param("userName") String userName);
+    Optional<User> findByUserName(@Param("userName") String userName);
+
 
 }
