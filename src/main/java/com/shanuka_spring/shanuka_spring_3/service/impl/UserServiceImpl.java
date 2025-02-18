@@ -3,6 +3,7 @@ package com.shanuka_spring.shanuka_spring_3.service.impl;
 import com.shanuka_spring.shanuka_spring_3.dto.UserDto;
 import com.shanuka_spring.shanuka_spring_3.entity.UserEntity;
 import com.shanuka_spring.shanuka_spring_3.repository.UserRepository;
+import com.shanuka_spring.shanuka_spring_3.service.JwtService;
 import com.shanuka_spring.shanuka_spring_3.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,13 +17,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager ) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
-
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
         );
 //        UserEntity userEntity = userRepository.findByUserName(user.getUsername()).orElse(null);
         if (authentication.isAuthenticated()) {
-            return "sda43253f34fsefw4fefasawefsdsfasf";
+            return jwtService.generateToken(user);
         }
         return "fail";
     }
