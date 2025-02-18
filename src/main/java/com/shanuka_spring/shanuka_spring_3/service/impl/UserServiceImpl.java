@@ -4,6 +4,9 @@ import com.shanuka_spring.shanuka_spring_3.dto.UserDto;
 import com.shanuka_spring.shanuka_spring_3.entity.UserEntity;
 import com.shanuka_spring.shanuka_spring_3.repository.UserRepository;
 import com.shanuka_spring.shanuka_spring_3.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +15,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+
     }
 
     @Override
@@ -32,8 +39,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity login(String username) {
-        return userRepository.findByUserName(username).orElse(null);
-
+    public String login(UserEntity user) {
+                Authentication authentication=authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword())
+        );
+//        UserEntity userEntity = userRepository.findByUserName(user.getUsername()).orElse(null);
+        if (authentication.isAuthenticated()) {
+            return "sda43253f34fsefw4fefasawefsdsfasf";
+        }
+        return "fail";
     }
+
+//        Authentication authentication=authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword())
+//        );
+//
+//        if (authentication.isAuthenticated()){
+//            return jwtService.generateToken(user);
+//        }
+//        return "fail";
+//
+//    }
 }

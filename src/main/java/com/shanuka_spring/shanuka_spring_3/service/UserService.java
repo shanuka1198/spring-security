@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     UserEntity register(UserDto userDto);
-    UserEntity login(String userName);
+    String login(UserEntity user);
 }
