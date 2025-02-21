@@ -21,11 +21,13 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Product createProduct(@RequestBody ProductDto productDto) {
         return productService.createProduct(productDto);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CLIENT')")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
