@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -28,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
-                .roles(userEntity.getRole().name())
+                .roles(userEntity.getRole().name())  // User role එක set කිරීම
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import com.shanuka_spring.shanuka_spring_3.dto.ProductDto;
 import com.shanuka_spring.shanuka_spring_3.entity.Product;
 import com.shanuka_spring.shanuka_spring_3.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

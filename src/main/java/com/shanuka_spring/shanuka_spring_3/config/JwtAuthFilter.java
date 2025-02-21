@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,37 +30,34 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userName;
 
+        // Authorization header එක check කරන්න
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String jwt = authHeader.substring(7);
-        final String userName = jwtService.extractUsername(jwt);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Bearer Token එක එකතු කරනවා
+        jwt = authHeader.substring(7);
+        userName = jwtService.extractUsername(jwt); // `extractUserName()` -> `extractUsername()` කරලා update කරන්න
 
-        System.out.println("JWT Token: " + jwt);
-        System.out.println("Extracted Username: " + userName);
-
-        if (userName != null && authentication == null) {
+        // User authenticated නැත්නම් check කරලා authentication කරන්න
+        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            if (jwtService.validateToken(jwt, userDetails.getUsername())) {  // Validate token correctly
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
 
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            } else {
-                System.out.println("JWT Token is invalid or expired");
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                // **Spring Security Context එකට Authentication එක set කරනවා**
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-        } else {
-            System.out.println("Username or Authentication is null");
         }
 
         filterChain.doFilter(request, response);
     }
-
-
 }
